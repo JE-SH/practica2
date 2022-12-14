@@ -39,23 +39,46 @@ const char PALETTE[32] = {
   0x0d,0x27,0x2a	// sprite palette 3
 };
 
-// setup PPU and tables
 void setup_graphics() {
-  // clear sprites
   oam_clear();
-  // set palette colors
   pal_all(PALETTE);
 }
 
 void main(void)
 {
-  setup_graphics();
-  // draw message  
-  vram_adr(NTADR_A(2,2));
-  vram_write("HELLO, WORLD!", 12);
-  // enable rendering
+  char oam_id;	// sprite ID
+
+  setup_graphics(); // establecer gráficos
+  vram_adr(NTADR_A(2,2)); // dirección para frase
+  vram_write("HELLO, WORLD!", 12); // Frase a imprimir
+  
+  // encender pantalla
   ppu_on_all();
-  // infinite loop
+  // bucle infinito
   while(1) {
+    oam_id = 0; // Empezar con OAMid/sprite 0
+    
+    oam_id = oam_spr(100, 100, 0x80, 1, oam_id);
+    oam_id = oam_spr(108, 100, 0x81, 1, oam_id);
+    oam_id = oam_spr(116, 100, 0x82, 1, oam_id);
+    oam_id = oam_spr(100, 108, 0x83, 1, oam_id);
+    oam_id = oam_spr(108, 108, 0x84, 1, oam_id);
+    oam_id = oam_spr(116, 108, 0x85, 1, oam_id);
+    oam_id = oam_spr(100, 116, 0x86, 1, oam_id);
+    oam_id = oam_spr(108, 116, 0x87, 1, oam_id);
+    oam_id = oam_spr(116, 116, 0x88, 1, oam_id);
+    
+    oam_id = oam_spr(104, 100, 0x80, 2, oam_id);
+    oam_id = oam_spr(112, 100, 0x81, 2, oam_id);
+    oam_id = oam_spr(120, 100, 0x82, 2, oam_id);
+    oam_id = oam_spr(104, 108, 0x83, 2, oam_id);
+    oam_id = oam_spr(112, 108, 0x84, 2, oam_id);
+    oam_id = oam_spr(120, 108, 0x85, 2, oam_id);
+    oam_id = oam_spr(104, 116, 0x86, 2, oam_id);
+    oam_id = oam_spr(112, 116, 0x87, 2, oam_id);
+    oam_id = oam_spr(120, 116, 0x88, 2, oam_id);
+
+  
+    if (oam_id != 0) oam_hide_rest(oam_id);
   }
 }
